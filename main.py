@@ -1,3 +1,4 @@
+import datetime
 MENU = {
     "espresso": {
         "ingredients": {
@@ -31,15 +32,21 @@ resources = {
     "coffee": 100,
 }
 
+profit = 0
+
 
 def get_user_input():
     # TODO: 1. Prompt user by asking “What would you like? (espresso/latte/cappuccino):
     user_prompt = input('“What would you like? (espresso/latte/cappuccino)')
     return user_prompt
-    #TODO: 5.  Process coins.
 
 
 def process_coins(cost):
+    # TODO: 5.  Process coins.
+    global profit
+    start_time = datetime.datetime.now()
+    end_time = start_time + datetime.timedelta(seconds=10)
+    wait_time = False
     total = 0
     coins = {
         "quarter": 0.25,
@@ -47,12 +54,21 @@ def process_coins(cost):
         "nickles": 0.50,
         "pennies": 0.01,
     }
-    while total < cost:
-        coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
-        for key, value in coins.items():
-            if key == coin_input:
-                total += value
 
+    while total < cost:     # datetime.datetime.now():      # datetime to develop more
+
+        coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
+        if coin_input:
+            wait_time = True
+        if not coin_input and end_time > start_time:
+            return total
+        else:
+            for key, value in coins.items():
+                if key == coin_input:
+                    total += value
+        coin_input = 0
+    profit += total
+    return total
 
 
 def coffee_machine(fetch_menu):
