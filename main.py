@@ -57,16 +57,12 @@ def process_coins(cost):
 
     while total < cost:     # datetime.datetime.now():      # datetime to develop more
 
-        coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
-        if coin_input:
-            wait_time = True
-        if not coin_input and end_time > start_time:
-            return total
-        else:
+        while end_time > start_time:
+            coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
             for key, value in coins.items():
                 if key == coin_input:
                     total += value
-        coin_input = 0
+
     profit += total
     return total
 
@@ -116,9 +112,13 @@ def coffee_machine(fetch_menu):
     #TODO: 7. Make Coffee.
 
 
-coffee_machine(MENU)
+#coffee_machine(MENU)
 # resources['water'] -= MENU['espresso']['ingredients']['water']
 # print(resources)
 #
 # for i, a in resources.items():
 #     print(i,a)
+
+start_time = datetime.datetime.now()
+end_time = start_time + datetime.timedelta(seconds=10)
+print(end_time)
