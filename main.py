@@ -1,4 +1,5 @@
 import datetime
+import time
 MENU = {
     "espresso": {
         "ingredients": {
@@ -44,8 +45,7 @@ def get_user_input():
 def process_coins(cost):
     # TODO: 5.  Process coins.
     global profit
-    start_time = datetime.datetime.now()
-    end_time = start_time + datetime.timedelta(seconds=10)
+    seconds = 10
     wait_time = False
     total = 0
     coins = {
@@ -55,13 +55,21 @@ def process_coins(cost):
         "pennies": 0.01,
     }
 
-    while total < cost:     # datetime.datetime.now():      # datetime to develop more
+         # datetime.datetime.now():      # datetime to develop more
 
-        while end_time > start_time:
-            coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
-            for key, value in coins.items():
-                if key == coin_input:
-                    total += value
+    while seconds > 0:
+        while seconds > 0:
+            print(f"Time remaining: {seconds} seconds")
+            time.sleep(1)  # Delay for 1 second
+            seconds -= 1
+
+        print("Time's up!")
+        coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
+        if coin_input:
+            seconds += 2
+        for key, value in coins.items():
+            if key == coin_input:
+                total += value
 
     profit += total
     return total
@@ -80,7 +88,6 @@ def coffee_machine(fetch_menu):
         get_user_input()
     elif user_input == "espresso":
         resources['water'] -= fetch_menu['espresso']['ingredients']['water']
-        resources['milk'] -= fetch_menu['espresso']['ingredients']['milk']
         resources['coffee'] -= fetch_menu['espresso']['ingredients']['coffee']
         # TODO: 4. Check resources sufficient?
         for key, value in resources.items():
@@ -112,13 +119,10 @@ def coffee_machine(fetch_menu):
     #TODO: 7. Make Coffee.
 
 
-#coffee_machine(MENU)
+coffee_machine(MENU)
 # resources['water'] -= MENU['espresso']['ingredients']['water']
 # print(resources)
 #
 # for i, a in resources.items():
 #     print(i,a)
 
-start_time = datetime.datetime.now()
-end_time = start_time + datetime.timedelta(seconds=10)
-print(end_time)
