@@ -1,5 +1,7 @@
+import threading
 import datetime
 import time
+
 MENU = {
     "espresso": {
         "ingredients": {
@@ -36,13 +38,20 @@ resources = {
 profit = 0
 
 
+def idling():
+
+    time.sleep(1)
+    print("seconds")
+    return "time is up"
+
+
 def get_user_input():
     # TODO: 1. Prompt user by asking “What would you like? (espresso/latte/cappuccino):
     user_prompt = input('“What would you like? (espresso/latte/cappuccino)')
     return user_prompt
 
 
-def process_coins(cost):
+def process_coins(thread1, thread2):
     # TODO: 5.  Process coins.
     global profit
     seconds = 10
@@ -55,18 +64,9 @@ def process_coins(cost):
         "pennies": 0.01,
     }
 
-         # datetime.datetime.now():      # datetime to develop more
+    coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
 
-    while seconds > 0:
-        while seconds > 0:
-            print(f"Time remaining: {seconds} seconds")
-            time.sleep(1)  # Delay for 1 second
-            seconds -= 1
-
-        print("Time's up!")
-        coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
-        if coin_input:
-            seconds += 2
+    if coin_input:
         for key, value in coins.items():
             if key == coin_input:
                 total += value
@@ -75,7 +75,11 @@ def process_coins(cost):
     return total
 
 
-def coffee_machine(fetch_menu):
+th1 = threading.Thread(target=idling, args=())
+th2 = threading.Thread(target=process_coins, args=())
+
+
+def coffee_machine(fetch_menu, thread1, thread2):
     global resources
     price = 0
     user_input = get_user_input()
@@ -93,8 +97,9 @@ def coffee_machine(fetch_menu):
         for key, value in resources.items():
             if value <= 0:
                 print(f' enough {key}')
-        process_coins(cost= fetch_menu['espresso']['cost'])
-        return coffee_machine(fetch_menu)
+                #cost= fetch_menu['espresso']['cost'], old argument for process_coins
+        process_coins(thread1, thread2)  # ask to insert coins
+        return coffee_machine(fetch_menu, thread1, thread2) #
     elif user_input == "latte":
         resources['water'] -= fetch_menu['latte']['ingredients']['water']
         resources['milk'] -= fetch_menu['latte']['ingredients']['milk']
@@ -118,8 +123,7 @@ def coffee_machine(fetch_menu):
     #TODO: 6. Check transaction successful?
     #TODO: 7. Make Coffee.
 
-
-coffee_machine(MENU)
+coffee_machine(MENU, th1, th2)
 # resources['water'] -= MENU['espresso']['ingredients']['water']
 # print(resources)
 #
