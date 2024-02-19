@@ -51,13 +51,13 @@ def get_user_input():
     return user_input
 
 
-def process_coins(thread_idling):
+def process_coins(thread_idling, cost):
     # TODO: 5.  Process coins.
     global profit
     seconds = 10
     wait_time = False
     total = 0
-    cost = 0
+
     coins = {
         "quarter": 0.25,
         "dimes": 0.10,
@@ -67,12 +67,12 @@ def process_coins(thread_idling):
     thread_idling.start()
 
     while total < cost:
+        print(total, cost)
         coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
-        if coin_input:
-            for key, value in coins.items():
-                if key == coin_input:
-                    total += value
-                    profit += value
+        for key, value in coins.items():
+            if key == coin_input:
+                total += value
+                profit += value
 
     return total
 
@@ -101,7 +101,7 @@ def coffee_machine(fetch_menu, thread1):
             if value <= 0:
                 print(f' enough {key}')
 
-        process_coins(thread1)  # ask to insert coins
+        process_coins(thread1, cost=fetch_menu['espresso']['cost'])  # ask to insert coins
         return #coffee_machine(fetch_menu, thread1, thread2)
     elif user_input == "latte":
         resources['water'] -= fetch_menu['latte']['ingredients']['water']
@@ -110,8 +110,8 @@ def coffee_machine(fetch_menu, thread1):
         for key, value in resources.items():
             if value <= 0:
                 print(f'Sorry there is not not enough {key}')
-        process_coins(thread1)
-        return coffee_machine(fetch_menu)
+        process_coins(thread1, cost=fetch_menu['latte']['cost'])
+        return coffee_machine(fetch_menu, thread1)
     elif user_input == "cappuccino":
         resources['water'] -= fetch_menu['cappuccino']['ingredients']['water']
         resources['milk'] -= fetch_menu['cappuccino']['ingredients']['milk']
@@ -119,8 +119,8 @@ def coffee_machine(fetch_menu, thread1):
         for key, value in resources.items():
             if value <= 0:
                 print(f'Sorry there is not not enough {key}')
-        process_coins(thread1)
-        return coffee_machine(fetch_menu)
+        process_coins(thread1, cost=fetch_menu['cappuccino']['cost'])
+        return coffee_machine(fetch_menu, thread1)
     return
 
 
@@ -136,3 +136,4 @@ coffee_machine(MENU, ThreadIdling)
 
 #th1.start()
 #th2.start()
+
