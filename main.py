@@ -40,18 +40,18 @@ profit = 0
 
 def idling():
 
-    time.sleep(1)
-    print("seconds")
+    time.sleep(2)
+    print("\n seconds ")
     return "time is up"
 
 
 def get_user_input():
     # TODO: 1. Prompt user by asking “What would you like? (espresso/latte/cappuccino):
-    user_prompt = input('“What would you like? (espresso/latte/cappuccino)')
-    return user_prompt
+    user_input = input('“What would you like? (espresso/latte/cappuccino)')
+    return user_input
 
 
-def process_coins(thread1, thread2):
+def process_coins(thread_idling):
     # TODO: 5.  Process coins.
     global profit
     seconds = 10
@@ -63,8 +63,10 @@ def process_coins(thread1, thread2):
         "nickles": 0.50,
         "pennies": 0.01,
     }
-
+    thread_idling.start()
     coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
+      # should request input from the user
+    #thread_input.start()
 
     if coin_input:
         for key, value in coins.items():
@@ -75,11 +77,12 @@ def process_coins(thread1, thread2):
     return total
 
 
-th1 = threading.Thread(target=idling, args=())
-th2 = threading.Thread(target=process_coins, args=())
+ThreadIdling = threading.Thread(target=idling, args=())
+ThreadCoins = threading.Thread(target=process_coins, args=())
+ThreadInput = threading.Thread(target=get_user_input, args=())
 
 
-def coffee_machine(fetch_menu, thread1, thread2):
+def coffee_machine(fetch_menu, thread1):
     global resources
     price = 0
     user_input = get_user_input()
@@ -97,9 +100,9 @@ def coffee_machine(fetch_menu, thread1, thread2):
         for key, value in resources.items():
             if value <= 0:
                 print(f' enough {key}')
-                #cost= fetch_menu['espresso']['cost'], old argument for process_coins
-        process_coins(thread1, thread2)  # ask to insert coins
-        return coffee_machine(fetch_menu, thread1, thread2) #
+                
+        process_coins(thread1)  # ask to insert coins
+        return #coffee_machine(fetch_menu, thread1, thread2)
     elif user_input == "latte":
         resources['water'] -= fetch_menu['latte']['ingredients']['water']
         resources['milk'] -= fetch_menu['latte']['ingredients']['milk']
@@ -119,14 +122,15 @@ def coffee_machine(fetch_menu, thread1, thread2):
     return
 
 
+coffee_machine(MENU, ThreadIdling)
+# TODO: 6. Check transaction successful?
+# TODO: 7. Make Coffee.
 
-    #TODO: 6. Check transaction successful?
-    #TODO: 7. Make Coffee.
-
-coffee_machine(MENU, th1, th2)
 # resources['water'] -= MENU['espresso']['ingredients']['water']
 # print(resources)
 #
 # for i, a in resources.items():
 #     print(i,a)
 
+#th1.start()
+#th2.start()
