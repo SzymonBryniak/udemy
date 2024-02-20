@@ -41,11 +41,11 @@ ThreadEnd = False
 
 def idling():
     global ThreadEnd
+    global ToElapse
+    ToElapse = 10
     time.sleep(10)
-    end = True
 
     ThreadEnd = True
-
     return
 
 
@@ -106,14 +106,14 @@ def coffee_machine(fetch_menu, thread1):
                 print(f' enough {key}')
 
         process_coins(thread1, cost=fetch_menu['espresso']['cost'])  # ask to insert coins
-        return #coffee_machine(fetch_menu, thread1, thread2)
+        return coffee_machine(fetch_menu, thread1)
     elif user_input == "latte":
         resources['water'] -= fetch_menu['latte']['ingredients']['water']
         resources['milk'] -= fetch_menu['latte']['ingredients']['milk']
         resources['coffee'] -= fetch_menu['latte']['ingredients']['coffee']
         for key, value in resources.items():
             if value <= 0:
-                print(f'Sorry there is not not enough {key}')
+                print(f'Sorry there is not enough {key}')
         process_coins(thread1, cost=fetch_menu['latte']['cost'])
         return coffee_machine(fetch_menu, thread1)
     elif user_input == "cappuccino":
