@@ -36,13 +36,17 @@ resources = {
 }
 
 profit = 0
+ThreadEnd = False
 
 
 def idling():
+    global ThreadEnd
+    time.sleep(10)
+    end = True
 
-    time.sleep(2)
-    print("\n timeout ")
-    return "time is up"
+    ThreadEnd = True
+
+    return
 
 
 def get_user_input():
@@ -52,6 +56,7 @@ def get_user_input():
 
 
 def process_coins(thread_idling, cost):
+    global ThreadEnd
     # TODO: 5.  Process coins.
     global profit
     seconds = 10
@@ -64,9 +69,8 @@ def process_coins(thread_idling, cost):
         "nickles": 0.50,
         "pennies": 0.01,
     }
-    thread_idling.start()
 
-    while total < cost:
+    while total < cost and not ThreadEnd:
         print(total, cost)
         coin_input = input('Please insert coins (quarter, dimes, nickles, pennies): ')
         for key, value in coins.items():
@@ -124,6 +128,7 @@ def coffee_machine(fetch_menu, thread1):
     return
 
 
+ThreadIdling.start()
 coffee_machine(MENU, ThreadIdling)
 # TODO: 6. Check transaction successful?
 # TODO: 7. Make Coffee.
