@@ -55,6 +55,17 @@ def get_user_input():
     return user_input
 
 
+def check_transaction(total, cost):
+    if total >= cost:
+        print('transaction successful')
+        print('making coffee')
+        print(f'your change is {total - cost}')
+    elif total< cost:
+        print('not enough money inserted')
+    return
+    # TODO: 1. Prompt user by asking “What would you like? (espresso/latte/cappuccino):
+
+
 def process_coins(thread_idling, cost):
     global ThreadEnd
     # TODO: 5.  Process coins.
@@ -77,7 +88,7 @@ def process_coins(thread_idling, cost):
             if key == coin_input:
                 total += value
                 profit += value
-
+    check_transaction(total, cost)
     return total
 
 
