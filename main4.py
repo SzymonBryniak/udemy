@@ -12,7 +12,7 @@ def random_color():
     g = random.randint(0, 255)
     b = random.randint(0, 255)
     rgb = r, g, b
-    return tuple(rgb)
+    return rgb
 random_color()
 
 def random_move(ranangle, rancolor, tim):
