@@ -24,6 +24,7 @@ for i in range(1000):
     #         angle = random.choice(anglelist)
     #         rancolor = random.choice(colors)
     #         random_move(angle, rancolor, tim)
+    # for git
 screen.onscreenclick
 
 
